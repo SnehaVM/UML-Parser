@@ -1,3 +1,11 @@
+/**
+ * 
+ */
+
+/**
+ * @author sneha_2
+ *
+ */
 import java.io.File;
 public class Umlparser {
 	//private String fileName = "";
@@ -22,7 +30,7 @@ public class Umlparser {
 		}	
 		
 	}
-	public String getJavaSourceFiles(String sourceFolder)
+	public void getJavaSourceFiles(String sourceFolder)
 	{
 		File srcFolder = new File(sourceFolder);
 		if(srcFolder.isDirectory())
@@ -31,19 +39,22 @@ public class Umlparser {
 			if (allFiles != null) {
 				for (File f : allFiles) {
 					if(f.getName().endsWith(".java")){
-					parseJava(f);
+					parseCode(f);
 					}
 			    }	
 			}
 		}
 	}
+	public void parseCode(File sourceFile)
+	{
+	ParseJava p = new ParseJava();
+	p.parseCode(sourceFile);
 	
-	public void parseJava(File javaSorceFile){
-		//call parser
 	}
+	
 	public void generateUML(String parserOutput)
 	{
-		//call uml generator -- to do
+		//call uml generator
 	}
 	}
-}
+
