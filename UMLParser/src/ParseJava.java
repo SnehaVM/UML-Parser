@@ -7,10 +7,12 @@
  *
  */
 import java.io.File;
+import java.util.EnumSet;
 import java.util.List;
 
 import com.github.javaparser.*;
 import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.Modifier;
 //import for compilation unit 
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.BodyDeclaration;
@@ -20,6 +22,8 @@ import com.github.javaparser.ast.body.ConstructorDeclaration;
 import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.body.TypeDeclaration;
+import com.github.javaparser.ast.AccessSpecifier;
+
 public class ParseJava {
 	
 public void parseCode(File sourceFile)
@@ -42,12 +46,21 @@ public void parseCode(File sourceFile)
 			{
 			//is a class 
 				className = t.getName().toString();
-				List<BodyDeclaration<?>> bodyList = t.getMembers();
+				List<BodyDeclaration<?>> bodyList = t.getMembers(); 
 				for(BodyDeclaration<?> b: bodyList)
 				{
 					if(b instanceof FieldDeclaration)
-					{
-						//--to do
+					{											
+						EnumSet<Modifier> mods = ((FieldDeclaration) b).getModifiers();		
+						if(mods.contains(Modifier.PUBLIC))
+						{
+						//Public attribute
+						}
+						else if(mods.contains(Modifier.PRIVATE))	
+						{
+						//private attribute
+						
+						}
 					}
 					else if (b instanceof ConstructorDeclaration)
 					{
@@ -68,4 +81,15 @@ public void parseCode(File sourceFile)
 	e.printStackTrace();
 }
 }
+/*public static AccessSpecifier getAccessSpecifier(EnumSet<Modifier> modifiers) {
+    if (modifiers.contains(Modifier.PUBLIC)) {
+        return AccessSpecifier.PUBLIC;
+    } else if (modifiers.contains(Modifier.PROTECTED)) {
+        return AccessSpecifier.PROTECTED;
+    } else if (modifiers.contains(Modifier.PRIVATE)) {
+        return AccessSpecifier.PRIVATE;
+    } else {
+        return AccessSpecifier.DEFAULT;
+    }
+}*/
 }
