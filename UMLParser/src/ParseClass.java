@@ -68,7 +68,7 @@ public class ParseClass {
 		String modifier = "";
 		if (mods.contains(Modifier.PUBLIC)) {
 			modifier = "+";
-		}
+		} 
 		if (type == "field") {
 			if (mods.contains(Modifier.PRIVATE)) {
 				modifier = "-";
