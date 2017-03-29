@@ -19,8 +19,7 @@ import com.github.javaparser.ast.expr.SimpleName;
 import com.github.javaparser.ast.body.Parameter;
 
 public class ParseClass {
-	final CompilationUnit c;
-	private ArrayList<String> interfaces = new ArrayList<String>();
+	final CompilationUnit c;	
 	private ArrayList<String> attributes = new ArrayList<String>();
 	private ArrayList<String> chkAttributes = new ArrayList<String>();
 	private ArrayList<String> methods = new ArrayList<String>();
@@ -34,7 +33,6 @@ public class ParseClass {
 		String methodName = "";
 		SimpleName className = t.getName();
 		// Class<?>[] implementsList = t.getClass().getInterfaces();
-
 		List<BodyDeclaration<?>> bodyList = t.getMembers();
 		for (BodyDeclaration<?> b : bodyList) {
 			if (b instanceof FieldDeclaration) {
