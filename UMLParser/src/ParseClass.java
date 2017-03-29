@@ -8,7 +8,6 @@
  */
 
 import java.util.*;
-
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.body.BodyDeclaration;
@@ -136,10 +135,4 @@ public class ParseClass {
 		return modifier;
 	}
 }
-/*
- * public static AccessSpecifier getAccessSpecifier(EnumSet<Modifier> modifiers)
- * { if (modifiers.contains(Modifier.PUBLIC)) { return AccessSpecifier.PUBLIC; }
- * else if (modifiers.contains(Modifier.PROTECTED)) { return
- * AccessSpecifier.PROTECTED; } else if (modifiers.contains(Modifier.PRIVATE)) {
- * return AccessSpecifier.PRIVATE; } else { return AccessSpecifier.DEFAULT; } }
- */
+
