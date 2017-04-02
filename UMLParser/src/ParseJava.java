@@ -58,7 +58,7 @@ public class ParseJava {
 
 					} else {
 						// is a class
-						parseClass = new ParseClass(c);
+						parseClass = new ParseClass(c, compUnits);
 						parseClass.parseClassElements(t);
 					}
 				}
