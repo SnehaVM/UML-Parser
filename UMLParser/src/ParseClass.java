@@ -8,31 +8,65 @@
  */
 
 import java.util.*;
+
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Modifier;
+import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.BodyDeclaration;
+import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.ConstructorDeclaration;
 import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.body.TypeDeclaration;
 import com.github.javaparser.ast.expr.SimpleName;
+import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.body.Parameter;
 
 public class ParseClass {
-	final CompilationUnit c;	
+	final CompilationUnit c;
+	private ArrayList<String> interfaces = new ArrayList<String>();
 	private ArrayList<String> attributes = new ArrayList<String>();
 	private ArrayList<String> chkAttributes = new ArrayList<String>();
 	private ArrayList<String> methods = new ArrayList<String>();
-	
-	public ParseClass(CompilationUnit c) {
+	private ArrayList<CompilationUnit> cList;
+
+	HashMap<String, Boolean> mapClassOrInterface = new HashMap<String, Boolean>();
+	HashMap<String, String> mapClassConn = new HashMap<String, String>();
+
+	public ParseClass(CompilationUnit c, ArrayList<CompilationUnit> cList ) {
 		this.c = c;
+		this.cList = cList;
+		createMapCI(cList);
+	}
+
+	public void createMapCI(ArrayList<CompilationUnit> cList) {
+		 for (CompilationUnit c : cList) {
+	            List<TypeDeclaration<?>> cl = c.getTypes();
+	            for (Node n : cl) {
+	                ClassOrInterfaceDeclaration ci = (ClassOrInterfaceDeclaration) n;
+	                mapClassOrInterface.put(ci.getName().toString(), ci.isInterface());	                                                           
+	            }
+		 }
 	}
 
 	public void parseClassElements(TypeDeclaration<?> t) {
 		String modifier = "";
 		String methodName = "";
-		SimpleName className = t.getName();
+		String additions = ",";
+		String className = t.getName().toString();
 		// Class<?>[] implementsList = t.getClass().getInterfaces();
+		NodeList<ClassOrInterfaceType> s = ((ClassOrInterfaceDeclaration) t).getImplementedTypes();
+		NodeList<ClassOrInterfaceType> e = ((ClassOrInterfaceDeclaration) t).getExtendedTypes();
+
+		/*
+		 * String implType = ""; for(ClassOrInterfaceType ci: s) { implType =
+		 * ci.getName().toString(); }
+		 * 
+		 * String extendTypes = ""; for(ClassOrInterfaceType ci: e) { if
+		 * (extendTypes != "") extendTypes += ","; extendTypes +=
+		 * ci.getName().toString(); }
+		 */
 		List<BodyDeclaration<?>> bodyList = t.getMembers();
 		for (BodyDeclaration<?> b : bodyList) {
 			if (b instanceof FieldDeclaration) {
@@ -109,6 +143,7 @@ public class ParseClass {
 						}
 						methods.add(modifier + " " + methodName + paramFormat + " : " + returnType);
 					}
+
 				}
 			}
 
