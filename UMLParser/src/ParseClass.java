@@ -27,7 +27,7 @@ public class ParseClass {
 	final CompilationUnit c;
 	private ArrayList<String> interfaces = new ArrayList<String>();
 	private ArrayList<String> attributes = new ArrayList<String>();
-	private ArrayList<String> chkAttributes = new ArrayList<String>();
+	private ArrayList<String> getterSetters = new ArrayList<String>();
 	private ArrayList<String> methods = new ArrayList<String>();
 	private ArrayList<CompilationUnit> cuList;
 
@@ -59,14 +59,6 @@ public class ParseClass {
 		NodeList<ClassOrInterfaceType> s = ((ClassOrInterfaceDeclaration) t).getImplementedTypes();
 		NodeList<ClassOrInterfaceType> e = ((ClassOrInterfaceDeclaration) t).getExtendedTypes();
 
-		/*
-		 * String implType = ""; for(ClassOrInterfaceType ci: s) { implType =
-		 * ci.getName().toString(); }
-		 * 
-		 * String extendTypes = ""; for(ClassOrInterfaceType ci: e) { if
-		 * (extendTypes != "") extendTypes += ","; extendTypes +=
-		 * ci.getName().toString(); }
-		 */
 		List<BodyDeclaration<?>> bodyList = t.getMembers();
 		for (BodyDeclaration<?> b : bodyList) {
 			if (b instanceof FieldDeclaration) {
@@ -76,7 +68,7 @@ public class ParseClass {
 				modifier = checkModifier(mods, "field");
 				// if private attribute with getter/setter - display as public
 				// attribute
-				if (modifier == "-" && chkAttributes.contains(attrName.toLowerCase())) {
+				if (modifier == "-" && getterSetters.contains(attrName.toLowerCase())) {
 					modifier = "+";
 				}
 				// TO DO -- chk instance variable with no corresponding java
@@ -120,7 +112,7 @@ public class ParseClass {
 				if (modifier != "" && modifier == "+") {
 					// if getter/setter, display it as public attribute
 					if (methodName.startsWith("get") || methodName.startsWith("set")) {
-						chkAttributes.add(methodName.substring(3).toLowerCase());
+						getterSetters.add(methodName.substring(3).toLowerCase());
 					}
 					// other methods
 					else {
