@@ -29,21 +29,21 @@ public class ParseClass {
 	private ArrayList<String> attributes = new ArrayList<String>();
 	private ArrayList<String> chkAttributes = new ArrayList<String>();
 	private ArrayList<String> methods = new ArrayList<String>();
-	private ArrayList<CompilationUnit> cList;
+	private ArrayList<CompilationUnit> cuList;
 
 	HashMap<String, Boolean> mapClassOrInterface = new HashMap<String, Boolean>();
 	HashMap<String, String> mapClassConn = new HashMap<String, String>();
 
 	public ParseClass(CompilationUnit c, ArrayList<CompilationUnit> cList ) {
 		this.c = c;
-		this.cList = cList;
-		createMapCI(cList);
+		this.cuList = cList;
+		createMapCI(cuList);
 	}
 
 	public void createMapCI(ArrayList<CompilationUnit> cList) {
 		 for (CompilationUnit c : cList) {
-	            List<TypeDeclaration<?>> cl = c.getTypes();
-	            for (Node n : cl) {
+	            List<TypeDeclaration<?>> td = c.getTypes();
+	            for (Node n : td) {
 	                ClassOrInterfaceDeclaration ci = (ClassOrInterfaceDeclaration) n;
 	                mapClassOrInterface.put(ci.getName().toString(), ci.isInterface());	                                                           
 	            }
