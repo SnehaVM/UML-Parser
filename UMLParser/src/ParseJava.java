@@ -52,7 +52,7 @@ public class ParseJava {
 				// we need only class/interface types now
 				if (t instanceof ClassOrInterfaceDeclaration) {
 					if (((ClassOrInterfaceDeclaration) t).isInterface()) {
-						// is an interface -- TO DO
+						// is an interface
 						ParseInterface parseInterface = new ParseInterface();
 						parseInterface.modelInterface(t);
 
