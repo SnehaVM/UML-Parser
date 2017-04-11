@@ -55,7 +55,6 @@ public class ParseClass {
 		String methodName = "";
 		String additions = ",";
 		String className = t.getName().toString();
-		// Class<?>[] implementsList = t.getClass().getInterfaces();
 		NodeList<ClassOrInterfaceType> s = ((ClassOrInterfaceDeclaration) t).getImplementedTypes();
 		NodeList<ClassOrInterfaceType> e = ((ClassOrInterfaceDeclaration) t).getExtendedTypes();
 
