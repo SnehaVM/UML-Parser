@@ -26,7 +26,7 @@ import com.github.javaparser.ast.body.Parameter;
 public class ParseClass {
 	final CompilationUnit c;
 	private ArrayList<String> interfaces = new ArrayList<String>();
-	private ArrayList<String> attributes = new ArrayList<String>();
+	private ArrayList<String> privateAttributes = new ArrayList<String>();
 	private ArrayList<String> getterSetters = new ArrayList<String>();
 	private ArrayList<String> methods = new ArrayList<String>();
 	private ArrayList<CompilationUnit> cuList;
