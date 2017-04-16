@@ -7,7 +7,6 @@
  *
  */
 import java.io.File;
-
 public class Umlparser {
 	public static void main(String[] args) throws Exception {
 		String sourceFolder = "";
@@ -16,16 +15,14 @@ public class Umlparser {
 		if (args.length == 2) {			
 			sourceFolder = args[0];
 			fileName = args[1];
-			ParseJava p = new ParseJava();
-			p.getJavaSourceFiles(sourceFolder);
+			ParseClass p = new ParseClass(sourceFolder, fileName);
+		        p.getJavaSourceFiles();
+			
 		} 
 		else {
 			// incorrect input format
 			System.out.println("Please provide input in correct format - <source folder><output file name>");
 		}
 	}
-
-	public void generateUML(String parserOutput) {
-		// call uml generator -- TO DO
-	}
+	
 }
