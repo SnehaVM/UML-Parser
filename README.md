@@ -1,5 +1,5 @@
 # UML-Parser
-A parser which converts Java Source Code into UML Class Diagram and sequence diagram.
+A parser which converts Java source code into UML class diagram and sequence diagram.
 
 **Tools/libraries used:**
 - Java grammar parser : https://github.com/javaparser/javaparser [http://javaparser.org/]
