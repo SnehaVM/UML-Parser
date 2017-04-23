@@ -150,7 +150,7 @@ public class ParseClass {
 		} else {
 			diagramName = diagramName + ".png";
 		}
-		outputPath = srcFolder + "\\" + diagramName;
+		outputPath = srcFolder + "/" + diagramName;
 
 		try {
 			URL url = new URL(link);
