@@ -10,7 +10,6 @@
 public class Umlparser {
 
 	public static void main(String[] args) throws Exception {
-		// Get inputs
 		try {
 			if (args.length == 2) {
 				String sourceFolder = args[0];
