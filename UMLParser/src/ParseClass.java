@@ -103,20 +103,18 @@ public class ParseClass {
 				}
 
 			}
-			// if both exists - combine
+			
 		} else if (multiplicity.length() > 0 && relations.length() > 0) {
 			relations += multiplicity;
 		}
-
-		// relations other than association
-		//TO DO
+				
 		if (relations.length() == 0)
 			ymlGrammar = multiplicity;
 		else if (multiplicity.length() == 0)
 			ymlGrammar = relations;
 		else {
 			ymlGrammar = relations;
-			// combine multiplicity and relations
+			
 		}
 
 		// save UML diagram to the folder
