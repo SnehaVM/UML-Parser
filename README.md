@@ -4,6 +4,7 @@ A parser which converts Java source code into UML class diagram and sequence dia
 Techonology: Java
 
 **UML class parser:**
+
  Converts Java Source Code into UML Class Diagram. 
  
 **Tools/libraries used:**
@@ -12,16 +13,17 @@ Techonology: Java
 - UML Class Diagram generator: yUML [https://yuml.me/]
 
 **Run the program:**
+
   Jar is located in: https://github.com/SnehaVM/UML-Parser/blob/master/Jar/UMLParserClass.jar
   
   Command:
    java -jar UMLParserClass.jar ./TestCases/test4 classDiagram.png   
-   Argument1: full path to the testcase folder containing java files
-   
-   Argument2 - name of the output image file 
+   Argument1: full path to the testcase folder containing java files   
+   Argument2: name of the output image file 
    
 
 **UML Sequence parser:**
+
  Performs dynamic analysis of Java Source code to generate a UML Sequence Diagram. Implemented using Aspect oriented programming (AOP).
  
  **Tools/libraries used:**
@@ -33,6 +35,7 @@ Techonology: Java
  path to the above libraries :https://github.com/SnehaVM/UML-Parser/tree/master/SequenceDiagramAspect/lib
  
  **Run the program:**
+ 
   Jar is located in: https://github.com/SnehaVM/UML-Parser/blob/master/Jar/UMLSequence_Aspectj.jar
   
   command:
