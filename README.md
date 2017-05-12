@@ -34,6 +34,10 @@ Techonology: Java
  
  path to the above libraries :https://github.com/SnehaVM/UML-Parser/tree/master/SequenceDiagramAspect/lib
  
+  **Shell script for compile time weaving :**
+  
+  https://github.com/SnehaVM/UML-Parser/blob/master/SequenceDiagramAspect/Seqscript.sh
+ 
  **Run the program:**
  
   Jar is located in: https://github.com/SnehaVM/UML-Parser/blob/master/Jar/UMLSequence_Aspectj.jar
@@ -41,7 +45,6 @@ Techonology: Java
   command:
   Java -jar UMLSequence_Aspectj.jar
   
-  Shell script for compile time weaving : https://github.com/SnehaVM/UML-Parser/blob/master/SequenceDiagramAspect/Seqscript.sh
  
  
  
