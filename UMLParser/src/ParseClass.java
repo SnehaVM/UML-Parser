@@ -9,6 +9,7 @@
 
 import java.io.*;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.util.*;
 import java.util.regex.Pattern;
 
@@ -84,15 +85,20 @@ public class ParseClass {
 			String typeFirst = checkType(classes[0]);
 			String typeSec = checkType(classes[1]);
 			if (typeFirst == "class" && typeSec == "class")
-				multiplicity += "[" + classes[0] + "]" + val + "[" + classes[1] + "]" + ",";
+				multiplicity += "[" + classes[0] + "]   " + val + "   [" + classes[1] + "]" + ",";
 			else if (typeFirst == "class" && typeSec == "interface")
-				multiplicity += "[" + classes[0] + "]" + val + "[" + "<<interface>>;" + classes[1] + "]" + ",";
+				multiplicity += "[" + classes[0] + "]   " + val + "    [" + "<<interface>>;" + classes[1] + "]" + ",";
 			else
-				multiplicity += "[" + "<<interface>>;" + classes[0] + "]" + val + "[" + "<<interface>>;" + classes[1]
-						+ "]" + ",";
+				multiplicity += "[" + "<<interface>>;" + classes[0] + "]    " + val + "   [" + "<<interface>>;"
+						+ classes[1] + "]" + ",";
 		}
 
 		// if only association exists
+		multiplicity = multiplicity.replace("<<", "«");
+		relations = relations.replace("<<", "«");
+		multiplicity = multiplicity.replace(">>", "»");
+		relations = relations.replace(">>", "»");
+
 		if (multiplicity.length() > 0 && relations.length() == 0) {
 			for (String i : memKeys) {
 				String val = mapFullMembers.get(i);
@@ -100,21 +106,43 @@ public class ParseClass {
 					if (multiplicity.contains(i)) {
 						multiplicity = multiplicity.replaceFirst(Pattern.quote("[" + i + "]"), "[" + val + "]");
 					}
+				} else {
+					if (multiplicity.contains(i)) {
+						multiplicity = multiplicity.replaceFirst(Pattern.quote("[" + "«interface»;" + i + "]"),
+								"[" + "«interface»;" + val + "]");
+					}
 				}
 
 			}
-			
+			// if both exists - combine
 		} else if (multiplicity.length() > 0 && relations.length() > 0) {
 			relations += multiplicity;
 		}
-				
+
+		// relations other than association
+		if (relations.length() > 0) {
+			relations = relations.substring(0, relations.length() - 1);
+			for (String i : memKeys) {
+				String val = mapFullMembers.get(i);
+				if (!mapClassOrInterface.get(i)) {
+					if (relations.contains(i)) {
+						relations = relations.replaceFirst(Pattern.quote("[" + i + "]"), "[" + val + "]");
+					}
+				} else {
+					if (relations.contains(i)) {
+						relations = relations.replaceFirst(Pattern.quote("[" + "«interface»;" + i + "]"),
+								"[" + "«interface»;" + val + "]");
+					}
+				}
+			}
+		}
 		if (relations.length() == 0)
 			ymlGrammar = multiplicity;
 		else if (multiplicity.length() == 0)
 			ymlGrammar = relations;
 		else {
 			ymlGrammar = relations;
-			
+			// combine multiplicity and relations
 		}
 
 		// save UML diagram to the folder
@@ -136,22 +164,29 @@ public class ParseClass {
 	public void drawUML(String yUMLGrammar) {
 		String outputPath = "";
 		String extension = "";
-		String link = "https://yuml.me/diagram/plain/class/" + yUMLGrammar + ".png";
-		// file extension fix
-		int i = diagramName.lastIndexOf('.');
-		if (i > 0) {
-			extension = diagramName.substring(i + 1);
-			if (!(extension.toLowerCase().equals("png") || extension.toLowerCase().equals("jpg"))) {
-				diagramName = diagramName.substring(0, i + 1);
-				diagramName = diagramName + "png";
-			}
-		} else {
-			diagramName = diagramName + ".png";
-		}
-		outputPath = srcFolder + "/" + diagramName;
+
+		String URLStr;
 
 		try {
+			URLStr = URLEncoder.encode(yUMLGrammar, "UTF-8");
+			URLStr = URLStr.replace("+", " ");
+			String link = "https://yuml.me/diagram/plain/class/" + URLStr + ".png";
 			URL url = new URL(link);
+			// file extension fix
+			int i = diagramName.lastIndexOf('.');
+			if (i > 0) {
+				extension = diagramName.substring(i + 1);
+				if (!(extension.toLowerCase().equals("png") || extension.toLowerCase().equals("jpg"))) {
+					diagramName = diagramName.substring(0, i + 1);
+					diagramName = diagramName + "png";
+				}
+			} else {
+				diagramName = diagramName + ".png";
+			}
+
+			outputPath = srcFolder + "/" + diagramName;
+
+			// URL url = new URL(link);
 			InputStream is = url.openStream();
 			OutputStream os = new FileOutputStream(outputPath);
 			byte[] b = new byte[2048];
@@ -161,7 +196,7 @@ public class ParseClass {
 			}
 			is.close();
 			os.close();
-		} catch (IOException e) {
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -230,7 +265,7 @@ public class ParseClass {
 							functions = functions + paramName + " : " + paramType;
 							// find dependency
 							if (mapClassOrInterface.containsKey(paramType) && !(mapClassOrInterface.get(name))) {
-								String rl = "[" + name + "] uses -.->";
+								String rl = "[" + name + "]  -.->";
 								if (mapClassOrInterface.get(paramType)) {
 									rl += "[<<interface>>;" + paramType + "]";
 									if (!(relationships.contains(rl))) {
@@ -254,7 +289,28 @@ public class ParseClass {
 					// if getter/setter, display it as public attribute
 					if (methodName.startsWith("get") || methodName.startsWith("set")) {
 						getterSetters.add(methodName.substring(3).toLowerCase());
+						List<Node> nodes = ((MethodDeclaration) b).getChildNodes();
+						if (nodes.size() > 0) {
+							for (Node cnode : nodes) {
+								if (cnode instanceof BlockStmt) {
+									String methodBody = cnode.toString();
+									if (methodName.startsWith("get")) {
+										String attr[] = methodBody.toString().split(" ");
+										//System.out.println(attr.length);
+
+										String attrGet = attr[attr.length-1].split(";")[0];
+										//System.out.println(attrGet);
+										getterSetters.add(attrGet.toLowerCase());
+										//System.out									
+
+									}
+								}
+
+							}
+
+						}
 					}
+
 					// other methods
 					else {
 						if (addDelimiter) {
@@ -278,7 +334,7 @@ public class ParseClass {
 									// checking dependency w.r.t parameters
 									if (mapClassOrInterface.containsKey(paramType)
 											&& !(mapClassOrInterface.get(name))) {
-										String rl = "[" + name + "] uses -.->";
+										String rl = "[" + name + "]  -.->";
 										if (mapClassOrInterface.get(paramType)) {
 											rl += "[<<interface>>;" + paramType + "]";
 											if (!(relationships.contains(rl))) {
@@ -295,7 +351,7 @@ public class ParseClass {
 										for (String mb : methodBody) {
 											// 12/4/2017
 											if (mapClassOrInterface.containsKey(mb) && !mapClassOrInterface.get(name)) {
-												relationships += "[" + name + "] uses -.->";
+												relationships += "[" + name + "]  -.->";
 												if (mapClassOrInterface.get(mb))
 													relationships += "[<<interface>>;" + mb + "]";
 												else
@@ -380,7 +436,9 @@ public class ParseClass {
 
 		}
 		// added for getter/setter 12/4/2017 - start
-		for (String pf : privateFields) {
+		for (
+
+		String pf : privateFields) {
 			if (getterSetters.contains(pf.toLowerCase()))
 				fields = fields.replace("-" + pf, "+" + pf);
 		}
@@ -414,8 +472,8 @@ public class ParseClass {
 			st += "|" + functions;
 		} else
 			st += "|";
-		
-		//TO ADD 
+		// to store fields, methods, and constructor of each class
+		mapFullMembers.put(name, st);
 
 		if (!(relations.lastIndexOf(",") == relations.length() - 1))
 			relations += ",";
