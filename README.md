@@ -1,7 +1,7 @@
 # UML-Parser
 A parser which converts Java source code into UML class diagram and sequence diagram.
 
-Techonology: Java
+Technology: Java
 
 **UML class parser:**
 
@@ -20,6 +20,11 @@ Techonology: Java
    java -jar UMLParserClass.jar ./TestCases/test4 classDiagram.png   
    Argument1: full path to the testcase folder containing java files   
    Argument2: name of the output image file 
+   
+   **URL to YouTube video:** 
+   After integrating UML Parser with a Cloud Scale Web Application
+   
+   https://www.youtube.com/watch?v=znyis6tiX_s
    
 
 **UML Sequence parser:**
